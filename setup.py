@@ -22,25 +22,19 @@ if len(sys.argv)-1:
     else:
         error("Invalid command. Use either `setup` or `setup --gui`.")
 else:
-    log("Checking for local root folder...")
-    root = "ERRENG_LOCAL_ROOT"
-    if os.path.isdir("ERRENG_LOCAL_ROOT"):
-        log("Local root folder found.")
-        log("Checking for main program...")
-        erreng = os.path.join(root, "erreng.exe")
-        dest = "/home/malasaur/Desktop/"
-        if os.path.isfile(erreng):
-            log("Main program found.")
-            log("Copying main program to destination...")
-            os.system("cp "+erreng+" "+os.path.join(dest))
-            log("Program injected.")
-            ID = ask("Choose an ID for this instance: ")
-            log("Writing data to file...")
-            data = {"ID": ID}
-            json.dump(data, open(os.path.join(dest, "data.json"), "w"))
-            log("Data written.")
-            done("Setup finished.")
-        else:
-            error("Main program not found.")
+    log("Checking for main program...")
+    erreng = "erreng.exe"
+    dest = "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp"
+    if os.path.isfile(erreng):
+        log("Main program found.")
+        log("Copying main program to destination...")
+        os.system("copy "+erreng+" "+os.path.join(dest))
+        log("Program injected.")
+        ID = ask("Choose an ID for this instance: ")
+        log("Writing data to file...")
+        data = {"ID": ID, "exec_data": {}}
+        json.dump(data, open(os.path.join(dest, "data.json"), "w"))
+        log("Data written.")
+        done("Setup finished.")
     else:
-        error("Local root folder not found.")
+        error("Main program not found.")
