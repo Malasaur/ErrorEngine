@@ -49,6 +49,7 @@ def log(msg):
 
 async def run_executable(executable):
     process = await asyncio.create_subprocess_exec(
+        "wine", #TODO:remove
         executable,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
