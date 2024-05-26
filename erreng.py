@@ -28,29 +28,30 @@ os.system(ID+".exe")
 log("Local code executed.")
 
 
-"""
+
 
 import os, json, urllib.request, colorama, asyncio, subprocess, datetime
 
-print("\n["+str(datetime.datetime.today())+"]", file=open("erreng.log", "a"))
+logfile = os.path.join("ERRENG", "erreng.log")
+
+print("\n["+str(datetime.datetime.today())+"]", file=open(logfile, "a"))
 
 def download(root, file):
-    urllib.request.urlretrieve(root + file, file)
+    urllib.request.urlretrieve(root + file, os.path.join("ERRENG",file))
 
 def log(msg):
     if type(msg) == str:
         print("[i]", msg)
-        print("[i]", msg, file=open("erreng.log", "a"))
+        print("[i]", msg, file=open(logfile, "a"))
     else:
         print(end=colorama.Fore.RED)
         print("[!]", str(msg))
-        print("[!]", str(msg), file=open("erreng.log", "a"))
+        print("[!]", str(msg), file=open(logfile, "a"))
         print(end=colorama.Fore.RESET)
 
 async def run_executable(executable):
     process = await asyncio.create_subprocess_exec(
-        "wine", #TODO:remove
-        executable,
+        os.path.join("ERRENG", executable),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
     )
@@ -83,3 +84,7 @@ if __name__ == "__main__":
         asyncio.run(main())
     except Exception as e:
         log(e)
+
+         
+
+"""

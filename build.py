@@ -1,11 +1,11 @@
-import sys, os, shutil
+import os, shutil
 
-file = sys.argv[1]
+file = "setup.py"
 
 def wpython(args):
-    os.system(r'wine "/home/malasaur/.wine/drive_c/Program Files/Python312/python.exe" ' + args)
+    os.system('wine "/home/malasaur/.wine/drive_c/Program Files/Python312/python.exe" ' + args + ' --paths="C:\\Program Files\\Python312\\Lib\\site-packages"')
 
-wpython("-m PyInstaller "+file+" --onefile --noconsole")
+wpython("-m PyInstaller "+file+" --onefile")
 
 efile = file.split(".")[0]+".exe"
 os.rename("dist/"+efile, efile)

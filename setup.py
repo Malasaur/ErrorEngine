@@ -1,4 +1,6 @@
-import os, sys, colorama, json
+import os, colorama, json, shutil
+
+colorama.just_fix_windows_console()
 
 def log(msg):
     print("[i]", msg)
@@ -16,25 +18,36 @@ def ask(msg):
 def done(msg):
     print(colorama.Fore.LIGHTGREEN_EX+"[✓]", msg, colorama.Fore.RESET)
 
-if len(sys.argv)-1:
-    if sys.argv[1] == "--gui":
-        from easygui import *
-    else:
-        error("Invalid command. Use either `setup` or `setup --gui`.")
+# Ask for drive letter and find startup folder
+drive = ask("Enter drive letter: ")[0].upper()
+dest = drive+":\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp"
+
+# Find main program
+log("Checking for main program...")
+erreng = "erreng.py"
+if os.path.isfile(erreng):
+    log("Main program found.")
+
+    # Copy main program to startup folder
+    log("Copying main program to destination...")
+    shutil.copyfile(erreng, dest)
+    log("Program injected.")
+
+    # Create "ERRENG" folder in startup folder
+    log("Creating ERRENG folder...")
+    errengdir = os.path.join(dest, "ERRENG")
+    os.mkdir(errengdir)
+    log("ERRENG folder created.")
+
+    # Ask for ID
+    ID = ask("Choose an ID for this instance: ")
+    log("Writing data to file...")
+
+    # Save ID in data file
+    data = {"ID": ID, "exec_data": {}}
+    json.dump(data, open(os.path.join(dest, "data.json"), "w"))
+    log("Data written.")
+
+    done("Setup finished.")
 else:
-    log("Checking for main program...")
-    erreng = "erreng.exe"
-    dest = "C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\StartUp"
-    if os.path.isfile(erreng):
-        log("Main program found.")
-        log("Copying main program to destination...")
-        os.system("copy "+erreng+" "+os.path.join(dest))
-        log("Program injected.")
-        ID = ask("Choose an ID for this instance: ")
-        log("Writing data to file...")
-        data = {"ID": ID, "exec_data": {}}
-        json.dump(data, open(os.path.join(dest, "data.json"), "w"))
-        log("Data written.")
-        done("Setup finished.")
-    else:
-        error("Main program not found.")
+    error("Main program not found.")
