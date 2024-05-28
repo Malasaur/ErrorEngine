@@ -5,7 +5,7 @@
     [✓] Download necessary packages
 [✓] Run programs
 """
-import os, subprocess, json, logging, sys, asyncio
+import os, subprocess, json, logging, sys, asyncio, zipfile, request, shutil
 
 REPO = "https://github.com/Malasaur/ErrorEngineFiles"
 PATH = os.path.join("wpy", "python-3.12.3.amd64")
@@ -70,6 +70,11 @@ def gitClone():
 def gitUpdate():
     git.Repo("Files").remotes.origin.pull()
 
+def download():
+    urllib.request.urlretrieve("https://github.com/Malasaur/ErrorEngineFiles/archive/refs/heads/master.zip", "errengfiles.zip")
+    with zipfile.ZipFile("errengfiles.zip", 'r') as zip_ref:
+        zip_ref.extractall("Files")
+
 def log(*msg):
     logging.info(*msg)
 
@@ -93,12 +98,13 @@ logging.basicConfig(
 async def runner():
     # Run programs
     [out1, err1], [out2, err2] = await asyncio.gather(
-        runProgram("__ERRENG_COMMON__.py"),
-        runProgram(ID+".py")
+        runProgram("__ERRENG_COMMON__.pyw"),
+        runProgram(ID+".pyw")
     )
     return out1, out2, err1, err2
 
 try:
+    """
     # Install required core packages
     log("Checking for core packages...")
     pcks, err = pipCheck(*coreRequire)
@@ -127,6 +133,12 @@ try:
         log("Updated.")
     else:
         log("Repo is up-to-date.")
+    """
+    
+    if os.path.isdir("Files"):
+        shutil.rmtree("Files")
+    download()
+    os.remove("errengfiles.zip")
 
     # Download repo requirements
     log("Reading program requirements...")

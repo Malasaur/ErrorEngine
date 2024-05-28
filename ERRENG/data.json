@@ -1,4 +1,1 @@
-{
-	"ID": "erreng_test",
-	"require": ["gitpython"]
-}
+{"ID": "yusef_vm", "requirements": ["gitpython"]}
