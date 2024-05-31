@@ -26,7 +26,7 @@ def pipInstall(*packages): # Used to install python packages
 def pipCheck(*packages): # Used to get which packages are not installed
     proc = subprocess.Popen(
         ([PY, "-m"] if os.name=="nt" else [])+[
-            "pip", "list"
+            "pip", "list", "--no-warn-script-location"
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
@@ -42,7 +42,7 @@ def pipCheck(*packages): # Used to get which packages are not installed
 async def runProgram(prog): # Used to asyncronously run a program
     proc = subprocess.Popen(
         ([PY] if os.name=="nt" else ["python"])+[
-            os.path.join("Files", prog)
+            os.path.join("Files", prog), "--no-warn-script-location"
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE
